@@ -56,7 +56,7 @@ If startup fails immediately, check whether another process is already listening
 ### Stop The Stack
 
 ```bash
-docker compose -f deployment/docker-compose.yml down
+just stop
 ```
 
 ## Local Quality Commands
@@ -70,11 +70,13 @@ just install
 Available commands:
 
 ```bash
+just start
 just lint
 just format-check
 just type-check
 just test
 just check-all
+just stop
 ```
 
 `just test` runs unit and integration tests with branch coverage and enforces a minimum coverage threshold of 60%.

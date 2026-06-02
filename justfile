@@ -22,6 +22,9 @@ check-all: lint format-check type-check test
 
 start: docker-dev
 
+stop:
+    docker compose -f deployment/docker-compose.yml down
+
 docker-dev:
     @if ss -ltn | grep -E ':(80|443)\s' >/dev/null; then \
         echo "Error: ports 80 and/or 443 are already bound. Stop conflicting services and retry."; \
