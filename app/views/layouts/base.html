@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block page_title %}TLS Certificate Generator{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              background: "#0a0e1a",
+              surface: "#0f1524",
+              "surface-dim": "#0f1524",
+              "surface-bright": "#1a2438",
+              "surface-container-lowest": "#0a0e1a",
+              "surface-container-low": "#111828",
+              "surface-container": "#141c2e",
+              "surface-container-high": "#1a2438",
+              "surface-container-highest": "#202c42",
+              "surface-variant": "#1a2438",
+              "on-surface": "#e0e8f0",
+              "on-background": "#e0e8f0",
+              "on-surface-variant": "#a0b4c4",
+              primary: "#7dd3fc",
+              "primary-fixed": "#c8eaff",
+              "primary-fixed-dim": "#7dd3fc",
+              "primary-container": "#0e4d6e",
+              "on-primary": "#001f2e",
+              "on-primary-container": "#c8eaff",
+              secondary: "#88b4cc",
+              "secondary-container": "#1a3a4e",
+              tertiary: "#c8a0f0",
+              "tertiary-container": "#3d2060",
+              "tertiary-fixed-dim": "#c8a0f0",
+              outline: "#4a6070",
+              "outline-variant": "#2a3a48",
+              error: "#ff6b6b",
+              "error-container": "#3d1414",
+              "inverse-primary": "#0a4c6e",
+              "inverse-surface": "#e0e8f0",
+              "inverse-on-surface": "#0a0e1a",
+              "surface-tint": "#7dd3fc",
+            },
+            borderRadius: {
+              DEFAULT: "0.5rem",
+              lg: "1rem",
+              xl: "1.5rem",
+              full: "9999px",
+            },
+            fontFamily: {
+              headline: ["Inter"],
+              display: ["Inter"],
+              body: ["Inter"],
+              label: ["Inter"],
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #0a0e1a;
+        color: #e0e8f0;
+      }
+
+      .glass-card,
+      .glass-panel {
+        background: rgba(15, 21, 36, 0.6);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(125, 211, 252, 0.1);
+      }
+
+      .glass-card-elevated,
+      .glass-panel-elevated {
+        background: rgba(15, 21, 36, 0.75);
+        backdrop-filter: blur(24px);
+        border: 1px solid rgba(125, 211, 252, 0.15);
+      }
+    </style>
+    {% block head_extra %}{% endblock %}
+  </head>
+  <body class="min-h-screen bg-background text-on-background antialiased selection:bg-primary/25 selection:text-on-surface">
+    <div class="relative isolate min-h-screen overflow-hidden">
+      <div class="pointer-events-none absolute inset-x-0 top-[-12rem] h-80 bg-[radial-gradient(circle_at_top,rgba(125,211,252,0.18),transparent_58%)]"></div>
+      <div class="pointer-events-none absolute left-[-8rem] top-1/3 h-72 w-72 rounded-full bg-primary/10 blur-3xl"></div>
+      <div class="pointer-events-none absolute right-[-6rem] top-24 h-64 w-64 rounded-full bg-tertiary/10 blur-3xl"></div>
+
+      <header class="relative border-b border-primary/10 bg-slate-950/60 backdrop-blur-md">
+        <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-[0.3em] text-primary">TLS Utility</p>
+            <h1 class="text-lg font-black tracking-tight text-on-surface">Certificate Generator</h1>
+          </div>
+          <p class="hidden text-sm text-on-surface-variant sm:block">Server-rendered UI on top of the existing JSON API.</p>
+        </div>
+      </header>
+
+      <main class="relative mx-auto max-w-6xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-12">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

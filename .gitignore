@@ -1,0 +1,57 @@
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Test, type-check, and lint artifacts
+.coverage
+coverage.xml
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+
+# Logs and local process artifacts
+*.log
+*.out
+*.err
+*.pid
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Certificates, keys, and local security artifacts
+*.pem
+*.key
+*.crt
+*.csr
+*.der
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# Generated archives and local databases
+*.zip
+*.sqlite
+*.sqlite3
+*.db
+
+# Browser and E2E test output
+playwright-report/
+test-results/
+
+# Editor and OS files
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store

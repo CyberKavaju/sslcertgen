@@ -1,0 +1,10 @@
+tests/
+__pycache__/
+*.py[cod]
+.env*
+docs/
+deployment/
+.pytest_cache/
+coverage.xml
+.git/
+.gitignore

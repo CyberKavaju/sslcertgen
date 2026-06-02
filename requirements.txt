@@ -1,0 +1,7 @@
+Flask==3.0.3
+cryptography==42.0.8
+idna==3.7
+Flask-Limiter==3.8.0
+python-dotenv==1.0.1
+gunicorn==22.0.0
+dnspython==2.6.1

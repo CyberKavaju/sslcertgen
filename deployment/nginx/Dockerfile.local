@@ -1,0 +1,8 @@
+FROM nginx:alpine
+
+RUN apk add --no-cache openssl
+
+COPY scripts/generate-self-signed.sh /usr/local/bin/generate-self-signed.sh
+RUN chmod +x /usr/local/bin/generate-self-signed.sh
+
+CMD ["/bin/sh", "-c", "/usr/local/bin/generate-self-signed.sh && nginx -g 'daemon off;'"]

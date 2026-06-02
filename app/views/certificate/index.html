@@ -1,0 +1,95 @@
+{% extends "layouts/base.html" %}
+{% from "components/buttons.html" import btn_ghost, btn_primary %}
+{% from "components/cards.html" import glass_panel %}
+
+{% block page_title %}TLS Certificate Generator{% endblock %}
+
+{% block head_extra %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/certificate_page.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div id="certificate-page" class="space-y-6" data-state="idle">
+  <section class="space-y-3">
+    <h2 class="max-w-3xl text-4xl font-black tracking-tight text-on-surface sm:text-5xl">Public certificate DNS wizard.</h2>
+    <p class="max-w-2xl text-sm leading-7 text-on-surface-variant sm:text-base">Progress through domain setup, TXT instructions, verification, then issuance and ZIP download.</p>
+    <div class="glass-card inline-flex rounded-3xl px-4 py-3 text-sm text-on-surface-variant">
+      <span class="font-mono text-on-surface">POST /api/v1/public-cert/wizard/start</span>
+    </div>
+  </section>
+
+  {% call glass_panel("Wizard Progress", panel_id="wizard-progress-panel") %}
+    <ol id="wizard-steps" class="grid gap-3 text-xs uppercase tracking-[0.2em] text-on-surface-variant sm:grid-cols-4">
+      <li data-step-marker="1" class="wizard-step-marker">1. Domain</li>
+      <li data-step-marker="2" class="wizard-step-marker">2. TXT Record</li>
+      <li data-step-marker="3" class="wizard-step-marker">3. Verify</li>
+      <li data-step-marker="4" class="wizard-step-marker">4. Generate</li>
+    </ol>
+    <p id="request-status" class="mt-4 text-sm text-on-surface-variant" aria-live="polite">Idle.</p>
+    <p id="api-error-message" class="mt-3 hidden rounded-2xl border border-error/25 bg-error-container/70 px-4 py-3 text-sm text-error" role="alert"></p>
+  {% endcall %}
+
+  <section class="wizard-stage" aria-live="polite">
+    <div id="wizard-stage-track" class="wizard-stage-track">
+    {% call glass_panel("Step 1: Domain Input", panel_id="wizard-step-1", extra_classes="wizard-step wizard-stage-panel") %}
+      <form id="wizard-start-form" class="space-y-4" novalidate>
+        <label class="block space-y-2" for="domain-input">
+          <span class="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">Domain</span>
+          <input id="domain-input" name="domain" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="example.com" class="w-full rounded-2xl border border-primary/10 bg-surface-container-low px-4 py-3 text-sm text-on-surface placeholder:text-on-surface-variant focus:border-primary/30 focus:ring-1 focus:ring-sky-400/50" />
+        </label>
+        <p id="validation-message" class="hidden rounded-2xl border border-error/25 bg-error-container/70 px-4 py-3 text-sm text-error" role="alert"></p>
+        {{ btn_primary("Start wizard", button_id="wizard-start-button", button_type="submit", icon="rocket_launch", extra_classes="w-full sm:w-auto sm:min-w-56") }}
+      </form>
+    {% endcall %}
+
+    {% call glass_panel("Step 2: DNS TXT Instructions", panel_id="wizard-step-2", extra_classes="wizard-step wizard-stage-panel") %}
+      <div class="space-y-4" id="txt-instructions">
+        <p class="text-sm text-on-surface-variant">Add this TXT record at your DNS provider, then continue to verification.</p>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">TXT Name</p>
+          <p id="challenge-name" class="mt-2 rounded-2xl border border-primary/10 bg-surface-container-low px-4 py-3 font-mono text-sm text-on-surface"></p>
+          {{ btn_ghost("Copy TXT name", button_id="copy-challenge-name-button", icon="content_copy", extra_classes="mt-2 w-full sm:w-auto", attrs='data-copy-target="challenge-name"') }}
+        </div>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">TXT Value</p>
+          <p id="challenge-value" class="mt-2 rounded-2xl border border-primary/10 bg-surface-container-low px-4 py-3 font-mono text-sm text-on-surface"></p>
+          {{ btn_ghost("Copy TXT value", button_id="copy-challenge-value-button", icon="content_copy", extra_classes="mt-2 w-full sm:w-auto", attrs='data-copy-target="challenge-value"') }}
+        </div>
+      </div>
+      <div class="wizard-step-footer">
+        {{ btn_primary("Next: Verify TXT", button_id="step2-next-button", icon="arrow_forward", extra_classes="w-full sm:w-auto sm:min-w-48") }}
+      </div>
+    {% endcall %}
+
+    {% call glass_panel("Step 3: TXT Verification Test", panel_id="wizard-step-3", extra_classes="wizard-step wizard-stage-panel") %}
+      <div class="space-y-4">
+        <p class="text-sm text-on-surface-variant">Use a resolver check before issuing. Failed verification keeps this step active.</p>
+        {{ btn_primary("Test TXT Record", button_id="verify-txt-button", icon="network_check", extra_classes="w-full sm:w-auto") }}
+        <p id="verification-status" class="text-sm text-on-surface-variant" aria-live="polite"></p>
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.24em] text-on-surface-variant">Resolver Evidence</p>
+          <pre id="resolver-evidence" class="mt-2 whitespace-pre-wrap rounded-2xl border border-primary/10 bg-surface-container-low px-4 py-3 font-mono text-xs text-on-surface"></pre>
+        </div>
+        <p id="verification-hint" class="text-xs text-on-surface-variant">Hint: dig +short TXT _acme-challenge.&lt;your-domain&gt;</p>
+      </div>
+      <div class="wizard-step-footer">
+        {{ btn_primary("Next: Generate", button_id="step3-next-button", icon="arrow_forward", extra_classes="w-full sm:w-auto sm:min-w-48", attrs='disabled') }}
+      </div>
+    {% endcall %}
+
+    {% call glass_panel("Step 4: Generate + Download", panel_id="wizard-step-4", extra_classes="wizard-step wizard-stage-panel") %}
+      <div class="space-y-4">
+        <p class="text-sm text-on-surface-variant">Generation is unlocked only after TXT verification passes in this session.</p>
+        {{ btn_primary("Generate Certificate", button_id="wizard-generate-button", icon="bolt", extra_classes="w-full sm:w-auto") }}
+        {{ btn_ghost("Download ZIP", button_id="wizard-download-button", icon="download", extra_classes="w-full sm:w-auto", attrs='disabled') }}
+        <p id="issuance-status" class="text-sm text-on-surface-variant" aria-live="polite">Waiting for verification.</p>
+      </div>
+    {% endcall %}
+    </div>
+  </section>
+</div>
+{% endblock %}
+
+{% block scripts %}
+  <script src="{{ url_for('static', filename='js/certificate_page.js') }}" defer></script>
+{% endblock %}

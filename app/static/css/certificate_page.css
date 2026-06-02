@@ -1,0 +1,89 @@
+:root {
+  color-scheme: dark;
+}
+
+#certificate-page {
+  position: relative;
+}
+
+#certificate-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(125, 211, 252, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 211, 252, 0.06) 1px, transparent 1px);
+  background-size: 3rem 3rem;
+  mask-image: radial-gradient(circle at center, black 35%, transparent 78%);
+  pointer-events: none;
+}
+
+#certificate-page > * {
+  position: relative;
+}
+
+.output-pane {
+  min-height: 18rem;
+  resize: vertical;
+  overflow-wrap: anywhere;
+}
+
+.output-pane:focus {
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(125, 211, 252, 0.35);
+}
+
+.is-visible {
+  display: block;
+}
+
+.is-hidden {
+  display: none;
+}
+
+.wizard-step-locked {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.wizard-step-marker {
+  border: 1px solid rgba(125, 211, 252, 0.15);
+  border-radius: 9999px;
+  padding: 0.6rem 0.9rem;
+  transition: border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+}
+
+.wizard-step-marker.is-active {
+  border-color: rgba(125, 211, 252, 0.45);
+  background-color: rgba(125, 211, 252, 0.12);
+  color: #e0e8f0;
+}
+
+.wizard-stage {
+  overflow: hidden;
+}
+
+.wizard-stage-track {
+  display: flex;
+  width: 100%;
+  transition: transform 280ms ease;
+  will-change: transform;
+}
+
+.wizard-stage-panel {
+  flex: 0 0 100%;
+  min-width: 100%;
+}
+
+.wizard-step-footer {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(125, 211, 252, 0.1);
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 639px) {
+  .output-pane {
+    min-height: 15rem;
+  }
+}
